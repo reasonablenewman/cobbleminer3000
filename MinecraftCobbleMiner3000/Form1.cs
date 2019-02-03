@@ -34,8 +34,17 @@ namespace MinecraftCobbleMiner3000
             int icbdelay = Convert.ToInt32(Math.Round(bdelay, 0));
             int icwdelay = Convert.ToInt32(Math.Round(wdelay, 0));
 
-            // Wait a bit before mining
-            await Task.Delay(icwdelay);
+            int startoutdelay = 10;
+            DateTime future = DateTime.Now.AddSeconds(10);
+
+            outputPrint("Launching in:");
+            while (future > DateTime.Now)
+            {
+                outputPrint(startoutdelay.ToString());
+                await Task.Delay(1000);
+
+                startoutdelay = startoutdelay - 1;
+            }
 
             outputPrint("Beginning mining operation.");
 

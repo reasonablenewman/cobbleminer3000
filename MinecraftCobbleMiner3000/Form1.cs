@@ -76,5 +76,18 @@ namespace MinecraftCobbleMiner3000
 
             }
         }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string name = Application.ProductName;
+            string version = Application.ProductVersion;
+            string msg = String.Format("{0}. Copyright (c) 2019 William Sandbrink. Version {1} ", name, version);
+            MessageBox.Show(msg);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

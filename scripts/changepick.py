@@ -1,73 +1,15 @@
-import ctypes
+from pynput.keyboard import Key, Controller
 import time
 
-SendInput = ctypes.windll.user32.SendInput
+kbd = Controller()
 
+keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-# C struct redefinitions
-PUL = ctypes.POINTER(ctypes.c_ulong)
-class KeyBdInput(ctypes.Structure):
-    _fields_ = [("wVk", ctypes.c_ushort),
-                ("wScan", ctypes.c_ushort),
-                ("dwFlags", ctypes.c_ulong),
-                ("time", ctypes.c_ulong),
-                ("dwExtraInfo", PUL)]
+time.sleep(30)
+print("launching")
 
-
-class HardwareInput(ctypes.Structure):
-    _fields_ = [("uMsg", ctypes.c_ulong),
-                ("wParamL", ctypes.c_short),
-                ("wParamH", ctypes.c_ushort)]
-
-
-class MouseInput(ctypes.Structure):
-    _fields_ = [("dx", ctypes.c_long),
-                ("dy", ctypes.c_long),
-                ("mouseData", ctypes.c_ulong),
-                ("dwFlags", ctypes.c_ulong),
-                ("time",ctypes.c_ulong),
-                ("dwExtraInfo", PUL)]
-
-class Input_I(ctypes.Union):
-    _fields_ = [("ki", KeyBdInput),
-                 ("mi", MouseInput),
-                 ("hi", HardwareInput)]
-
-class Input(ctypes.Structure):
-    _fields_ = [("type", ctypes.c_ulong),
-                ("ii", Input_I)]
-
-
-# Actual Functions
-def PressKey(hexKeyCode):
-    extra = ctypes.c_ulong(0)
-    ii_ = Input_I()
-    ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008, 0, ctypes.pointer(extra) )
-    x = Input( ctypes.c_ulong(1), ii_ )
-    ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
-
-
-def ReleaseKey(hexKeyCode):
-    extra = ctypes.c_ulong(0)
-    ii_ = Input_I()
-    ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008 | 0x0002, 0, ctypes.pointer(extra) )
-    x = Input( ctypes.c_ulong(1), ii_ )
-    ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
-
-
-numarr = dict()
-numarr[1] = 0x49
-numarr[2] = 0x32
-numarr[3] = 0x33
-numarr[4] = 0x34
-numarr[5] = 0x35
-numarr[6] = 0x36
-numarr[7] = 0x37
-numarr[8] = 0x38
-numarr[9] = 0x39
-
-
-time.sleep(5)
-
-PressKey(numarr[1])
-ReleaseKey(numarr[1])
+for key in keys:
+    kbd.press(key)
+    print(f"pressing {key}")
+    kbd.release(key)
+    time.sleep(120)
